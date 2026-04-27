@@ -1,16 +1,14 @@
 import random
 
-
-
 class Player:
     def __init__(self):
         self.position = 1
-        self.name = None
+        self.name = None # names are set with Game.setName
 
 class Game:
 
     def __init__(self):
-        self.getSnakeLadderAmount()
+        self.getSnakeLadderAmount() # ask for snakes+ladder amount before we generate them
         self.snakes = self.generateSnakes()
         self.ladders = self.generateLadders()
         self.p1 = Player()
@@ -18,11 +16,11 @@ class Game:
         self.winner = None
 
 
-    def getSnakeLadderAmount(self):
+    def getSnakeLadderAmount(self): 
         snake_amount = 0
         ladder_amount = 0
 
-        while snake_amount <= 0 or snake_amount >= 30:
+        while snake_amount <= 0 or snake_amount >= 30: # account for too many/not enough snakes, plus non-numerical answers
             try:
                 snake_amount = int(input('Please enter the number of snakes to be added: '))
                 if snake_amount >= 30 or snake_amount <= 0:
@@ -44,12 +42,12 @@ class Game:
     def setName(self, player, name):
         player.name = name
 
-    def generateSnakes(self):
+    def generateSnakes(self): 
         snakes = {}
 
         for i in range(self.snake_amount):
             upper = random.randint(2, 99)
-            lower = upper - random.randint(1, upper)
+            lower = upper - random.randint(1, upper) # snakes actually go somewhere, and not off the board
 
             snakes[upper] = lower
 
@@ -59,7 +57,7 @@ class Game:
         ladders = {}
         for i in range(self.ladder_amount):
             lower = random.randint(1, 98)
-            upper = lower + random.randint(1, (99 - lower)) # 99 as 100 can cause the player to instawin 
+            upper = lower + random.randint(1, (99 - lower)) # 99 as 100 can cause the player to instawin, which I dont want.
 
             ladders[lower] = upper
 
@@ -72,7 +70,7 @@ class Game:
 
         if player.position + roll > 100:
             print(f'You surpassed 100 and made it to {player.position + roll}! You will be reset back to {player.position}.')
-            return None
+            return # return early, so we dont actually add the roll to the position
         
         player.position += roll
 
@@ -95,12 +93,12 @@ class Game:
 
     def displayBoard(self):
         print("Board: ")
-        for row in range(9, -1, -1):
+        for row in range(9, -1, -1): # build backwards so the first line is the numbers 91-100
             full_row = ""
             for col in range(10):
-                if row % 2 != 0: # Backward
+                if row % 2 != 0: # odd, so go backwards
                     num = row * 10 + (9 - col) + 1
-                else: # Forward
+                else: # even, so go fowards
                     num = row * 10 + col + 1
                 
                 if num in self.snakes:
@@ -110,7 +108,7 @@ class Game:
                 else:
                     display = str(num)
                 
-                full_row += display + " " * (8 - len(display))
+                full_row += display + " " * (8 - len(display)) # subtract off current size of display from 8 to get correct spacing
             print(full_row)
 
 
@@ -124,7 +122,7 @@ def main():
 
     while game.winner == None:
         game.takeTurn(game.p1)
-        if game.winner == None: # So we don't take two turns
+        if game.winner == None: # prevents bug with two turns
             game.takeTurn(game.p2)
 
     print(f'{game.winner.name} has won the game!')
