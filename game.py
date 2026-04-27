@@ -5,6 +5,7 @@ import random
 class Player:
     def __init__(self):
         self.position = 1
+        self.name = None
 
 class Game:
     snake_amount = 5
@@ -16,6 +17,9 @@ class Game:
         self.p1 = Player()
         self.p2 = Player()
         self.winner = None
+
+    def setName(self, player, name):
+        player.name = name
 
     def generateSnakes(self):
         snakes = {}
@@ -39,7 +43,7 @@ class Game:
         return ladders
 
     def takeTurn(self, player):
-        input(f'You are at position {player.position}. Press enter to roll.')
+        input(f'{player.name}, it is your turn. You are at position {player.position}. Press enter to roll.')
         roll = random.randint(1, 6)
         print(f'You rolled {roll}!')
 
@@ -89,11 +93,17 @@ class Game:
 
 def main():
     game = Game()
+    game.setName(game.p1, input("Please enter the name of player 1: "))
+    game.setName(game.p2, input("Please enter the name of player 2: "))
+
+    game.displayBoard()
 
     while game.winner == None:
         game.takeTurn(game.p1)
-        game.takeTurn(game.p2)
+        if game.winner == None: # So we don't take two turns
+            game.takeTurn(game.p2)
 
+    print(f'{game.winner.name} has won the game!')
 
 
 main()
