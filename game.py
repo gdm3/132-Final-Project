@@ -8,15 +8,38 @@ class Player:
         self.name = None
 
 class Game:
-    snake_amount = 5
-    ladder_amount = 5
 
     def __init__(self):
+        self.getSnakeLadderAmount()
         self.snakes = self.generateSnakes()
         self.ladders = self.generateLadders()
         self.p1 = Player()
         self.p2 = Player()
         self.winner = None
+
+
+    def getSnakeLadderAmount(self):
+        snake_amount = 0
+        ladder_amount = 0
+
+        while snake_amount <= 0 or snake_amount >= 30:
+            try:
+                snake_amount = int(input('Please enter the number of snakes to be added: '))
+                if snake_amount >= 30 or snake_amount <= 0:
+                    print('Snake count must be greater than 30 and less than 0.')
+            except ValueError:
+                print('Please enter a valid number.')
+        while ladder_amount <= 0 or ladder_amount >= 30:
+            try:
+                ladder_amount = int(input('Please enter the number of ladders to be added: '))
+                if ladder_amount >= 30 or ladder_amount <= 0:
+                    print('Ladder count must be greater than 30 and less than 0.')
+            except ValueError:
+                print('Please enter a valid number')
+
+        self.snake_amount = snake_amount
+        self.ladder_amount = ladder_amount
+        
 
     def setName(self, player, name):
         player.name = name
@@ -93,6 +116,7 @@ class Game:
 
 def main():
     game = Game()
+    
     game.setName(game.p1, input("Please enter the name of player 1: "))
     game.setName(game.p2, input("Please enter the name of player 2: "))
 
